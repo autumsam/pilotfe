@@ -75,16 +75,21 @@ const authService = {
    */
   async register(data: RegisterRequest): Promise<AuthResponse | AuthError> {
     try {
-      // First, get the CSRF token
-      await fetch(`${API_BASE_URL}/api/auth/csrf/`, {
+      // Get the CSRF token from the JSON response
+      const csrfResponse = await fetch(`${API_BASE_URL}/api/auth/csrf/`, {
         method: 'GET',
         credentials: 'include',
       });
 
-      const csrfToken = getCookie('csrftoken');
+      if (!csrfResponse.ok) {
+        throw new Error('Failed to get CSRF token');
+      }
+
+      const csrfData = await csrfResponse.json();
+      const csrfToken = csrfData.csrfToken;
       
       if (!csrfToken) {
-        throw new Error('CSRF token not found');
+        throw new Error('CSRF token not found in response');
       }
 
       const response = await fetch(`${API_BASE_URL}/api/auth/register/`, {
@@ -122,35 +127,36 @@ const authService = {
       console.log('Starting login process...');
       
       // #region agent log
-      fetch('http://127.0.0.1:7242/ingest/3af02a19-0e17-41e8-ac44-ef1dc9eeab8d',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'auth.ts:115',message:'Login started',data:{API_BASE_URL,origin:window.location.origin,allCookies:document.cookie},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H1,H2'})}).catch(()=>{});
+      fetch('http://127.0.0.1:7243/ingest/4e8bb68d-782f-45ce-81a8-1911fcb1a1c0',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'auth.ts:120',message:'Login started',data:{API_BASE_URL,origin:window.location.origin,timestamp:Date.now()},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H1'})}).catch(()=>{});
       // #endregion
       
-      // First, get the CSRF token
+      // Get the CSRF token from the JSON response
       const csrfResponse = await fetch(`${API_BASE_URL}/api/auth/csrf/`, {
         method: 'GET',
         credentials: 'include',
       });
-
-      // #region agent log
-      // const responseHeaders: Record<string, string> = {};
-      // csrfResponse.headers.forEach((value, key) => { responseHeaders[key] = value; });
-      // fetch('http://127.0.0.1:7242/ingest/3af02a19-0e17-41e8-ac44-ef1dc9eeab8d',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'auth.ts:125',message:'CSRF response received',data:{status:csrfResponse.ok,statusCode:csrfResponse.status,headers:responseHeaders,setCookie:responseHeaders['set-cookie']||'none'},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H3,H4'})}).catch(()=>{});
-      // // #endregion
 
       if (!csrfResponse.ok) {
         console.error('Failed to get CSRF token:', csrfResponse.status, csrfResponse.statusText);
         throw new Error('Failed to get CSRF token');
       }
 
-      const csrfToken = getCookie('csrftoken');
-      console.log('CSRF Token:', csrfToken);
+      // #region agent log
+      fetch('http://127.0.0.1:7243/ingest/4e8bb68d-782f-45ce-81a8-1911fcb1a1c0',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'auth.ts:138',message:'CSRF response received',data:{status:csrfResponse.ok,statusCode:csrfResponse.status},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H2'})}).catch(()=>{});
+      // #endregion
+
+      // Get the token from the JSON response instead of cookies
+      const csrfData = await csrfResponse.json();
+      const csrfToken = csrfData.csrfToken;
       
       // #region agent log
-      // fetch('http://127.0.0.1:7242/ingest/3af02a19-0e17-41e8-ac44-ef1dc9eeab8d',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'auth.ts:140',message:'After getCookie',data:{csrfToken:csrfToken||'NULL',allCookies:document.cookie,cookieLength:document.cookie.length},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H3,H4,H5'})}).catch(()=>{});
+      fetch('http://127.0.0.1:7243/ingest/4e8bb68d-782f-45ce-81a8-1911fcb1a1c0',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'auth.ts:148',message:'CSRF token extracted from JSON',data:{hasToken:!!csrfToken,tokenLength:csrfToken?.length||0,cookieValue:getCookie('csrftoken'),allCookies:document.cookie},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H3,H5'})}).catch(()=>{});
       // #endregion
       
+      console.log('CSRF Token from response:', csrfToken ? 'received' : 'missing');
+      
       if (!csrfToken) {
-        throw new Error('CSRF token not found in cookies');
+        throw new Error('CSRF token not found in response');
       }
 
       console.log('Sending login request...');
