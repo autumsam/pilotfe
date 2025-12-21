@@ -154,6 +154,7 @@ const authService = {
       });
 
       console.log('Login response status:', response.status);
+      console.log('Login response status:', response.status);
       
       // Get response text first to handle both JSON and non-JSON responses
       const responseText = await response.text();
