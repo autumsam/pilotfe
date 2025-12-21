@@ -3,7 +3,7 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://pilotbe.onrender.c
 // #region agent log
 // Log API_BASE_URL at module load
 if (typeof window !== 'undefined') {
-  fetch('http://127.0.0.1:7242/ingest/3af02a19-0e17-41e8-ac44-ef1dc9eeab8d',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'auth.ts:1',message:'Module loaded',data:{API_BASE_URL,VITE_API_URL:import.meta.env.VITE_API_URL||'undefined',windowOrigin:window.location.origin},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H1,H2'})}).catch(()=>{});
+  fetch('https://pilotbe.onrender.com//ingest/3af02a19-0e17-41e8-ac44-ef1dc9eeab8d',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'auth.ts:1',message:'Module loaded',data:{API_BASE_URL,VITE_API_URL:import.meta.env.VITE_API_URL||'undefined',windowOrigin:window.location.origin},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H1,H2'})}).catch(()=>{});
 }
 // #endregion
 
