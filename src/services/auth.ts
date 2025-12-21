@@ -2,9 +2,9 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://pilotbe.onrender.c
 
 // #region agent log
 // Log API_BASE_URL at module load
-if (typeof window !== 'undefined') {
-  fetch('https://pilotbe.onrender.com//ingest/3af02a19-0e17-41e8-ac44-ef1dc9eeab8d',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'auth.ts:1',message:'Module loaded',data:{API_BASE_URL,VITE_API_URL:import.meta.env.VITE_API_URL||'undefined',windowOrigin:window.location.origin},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H1,H2'})}).catch(()=>{});
-}
+// if (typeof window !== 'undefined') {
+//   fetch('https://pilotbe.onrender.com//ingest/3af02a19-0e17-41e8-ac44-ef1dc9eeab8d',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'auth.ts:1',message:'Module loaded',data:{API_BASE_URL,VITE_API_URL:import.meta.env.VITE_API_URL||'undefined',windowOrigin:window.location.origin},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H1,H2'})}).catch(()=>{});
+// }
 // #endregion
 
 // Helper function to get CSRF token from cookies
@@ -132,10 +132,10 @@ const authService = {
       });
 
       // #region agent log
-      const responseHeaders: Record<string, string> = {};
-      csrfResponse.headers.forEach((value, key) => { responseHeaders[key] = value; });
-      fetch('http://127.0.0.1:7242/ingest/3af02a19-0e17-41e8-ac44-ef1dc9eeab8d',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'auth.ts:125',message:'CSRF response received',data:{status:csrfResponse.ok,statusCode:csrfResponse.status,headers:responseHeaders,setCookie:responseHeaders['set-cookie']||'none'},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H3,H4'})}).catch(()=>{});
-      // #endregion
+      // const responseHeaders: Record<string, string> = {};
+      // csrfResponse.headers.forEach((value, key) => { responseHeaders[key] = value; });
+      // fetch('http://127.0.0.1:7242/ingest/3af02a19-0e17-41e8-ac44-ef1dc9eeab8d',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'auth.ts:125',message:'CSRF response received',data:{status:csrfResponse.ok,statusCode:csrfResponse.status,headers:responseHeaders,setCookie:responseHeaders['set-cookie']||'none'},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H3,H4'})}).catch(()=>{});
+      // // #endregion
 
       if (!csrfResponse.ok) {
         console.error('Failed to get CSRF token:', csrfResponse.status, csrfResponse.statusText);
@@ -146,7 +146,7 @@ const authService = {
       console.log('CSRF Token:', csrfToken);
       
       // #region agent log
-      fetch('http://127.0.0.1:7242/ingest/3af02a19-0e17-41e8-ac44-ef1dc9eeab8d',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'auth.ts:140',message:'After getCookie',data:{csrfToken:csrfToken||'NULL',allCookies:document.cookie,cookieLength:document.cookie.length},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H3,H4,H5'})}).catch(()=>{});
+      // fetch('http://127.0.0.1:7242/ingest/3af02a19-0e17-41e8-ac44-ef1dc9eeab8d',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'auth.ts:140',message:'After getCookie',data:{csrfToken:csrfToken||'NULL',allCookies:document.cookie,cookieLength:document.cookie.length},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H3,H4,H5'})}).catch(()=>{});
       // #endregion
       
       if (!csrfToken) {
