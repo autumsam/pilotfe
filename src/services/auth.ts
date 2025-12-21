@@ -1,12 +1,5 @@
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://pilotbe.onrender.com';
 
-// #region agent log
-// Log API_BASE_URL at module load
-// if (typeof window !== 'undefined') {
-//   fetch('https://pilotbe.onrender.com//ingest/3af02a19-0e17-41e8-ac44-ef1dc9eeab8d',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'auth.ts:1',message:'Module loaded',data:{API_BASE_URL,VITE_API_URL:import.meta.env.VITE_API_URL||'undefined',windowOrigin:window.location.origin},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H1,H2'})}).catch(()=>{});
-// }
-// #endregion
-
 // Helper function to get CSRF token from cookies
 function getCookie(name: string): string | null {
   const value = `; ${document.cookie}`;
@@ -126,10 +119,6 @@ const authService = {
     try {
       console.log('Starting login process...');
       
-      // #region agent log
-      fetch('http://127.0.0.1:7243/ingest/4e8bb68d-782f-45ce-81a8-1911fcb1a1c0',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'auth.ts:120',message:'Login started',data:{API_BASE_URL,origin:window.location.origin,timestamp:Date.now()},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H1'})}).catch(()=>{});
-      // #endregion
-      
       // Get the CSRF token from the JSON response
       const csrfResponse = await fetch(`${API_BASE_URL}/api/auth/csrf/`, {
         method: 'GET',
@@ -141,17 +130,9 @@ const authService = {
         throw new Error('Failed to get CSRF token');
       }
 
-      // #region agent log
-      fetch('http://127.0.0.1:7243/ingest/4e8bb68d-782f-45ce-81a8-1911fcb1a1c0',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'auth.ts:138',message:'CSRF response received',data:{status:csrfResponse.ok,statusCode:csrfResponse.status},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H2'})}).catch(()=>{});
-      // #endregion
-
       // Get the token from the JSON response instead of cookies
       const csrfData = await csrfResponse.json();
       const csrfToken = csrfData.csrfToken;
-      
-      // #region agent log
-      fetch('http://127.0.0.1:7243/ingest/4e8bb68d-782f-45ce-81a8-1911fcb1a1c0',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'auth.ts:148',message:'CSRF token extracted from JSON',data:{hasToken:!!csrfToken,tokenLength:csrfToken?.length||0,cookieValue:getCookie('csrftoken'),allCookies:document.cookie},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H3,H5'})}).catch(()=>{});
-      // #endregion
       
       console.log('CSRF Token from response:', csrfToken ? 'received' : 'missing');
       
