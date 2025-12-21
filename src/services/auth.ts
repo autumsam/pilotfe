@@ -1,13 +1,6 @@
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://pilotbe.onrender.com';
 
-// #region agent log
-// Log API_BASE_URL at module load
-// if (typeof window !== 'undefined') {
-//   fetch('https://pilotbe.onrender.com//ingest/3af02a19-0e17-41e8-ac44-ef1dc9eeab8d',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'auth.ts:1',message:'Module loaded',data:{API_BASE_URL,VITE_API_URL:import.meta.env.VITE_API_URL||'undefined',windowOrigin:window.location.origin},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H1,H2'})}).catch(()=>{});
-// }
-// #endregion
-
-// Helper function to get CSRF token from cookies
+// Helper function to get CSRF token from cookies (kept for backwards compatibility)
 function getCookie(name: string): string | null {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
@@ -75,16 +68,21 @@ const authService = {
    */
   async register(data: RegisterRequest): Promise<AuthResponse | AuthError> {
     try {
-      // First, get the CSRF token
-      await fetch(`${API_BASE_URL}/api/auth/csrf/`, {
+      // Get the CSRF token from the JSON response
+      const csrfResponse = await fetch(`${API_BASE_URL}/api/auth/csrf/`, {
         method: 'GET',
         credentials: 'include',
       });
 
-      const csrfToken = getCookie('csrftoken');
+      if (!csrfResponse.ok) {
+        throw new Error('Failed to get CSRF token');
+      }
+
+      const csrfData = await csrfResponse.json();
+      const csrfToken = csrfData.csrfToken;
       
       if (!csrfToken) {
-        throw new Error('CSRF token not found');
+        throw new Error('CSRF token not found in response');
       }
 
       const response = await fetch(`${API_BASE_URL}/api/auth/register/`, {
@@ -121,36 +119,25 @@ const authService = {
     try {
       console.log('Starting login process...');
       
-      // #region agent log
-      // fetch('http://127.0.0.1:7242/ingest/3af02a19-0e17-41e8-ac44-ef1dc9eeab8d',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'auth.ts:115',message:'Login started',data:{API_BASE_URL,origin:window.location.origin,allCookies:document.cookie},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H1,H2'})}).catch(()=>{});
-      // #endregion
-      
-      // First, get the CSRF token
+      // Get the CSRF token from the JSON response
       const csrfResponse = await fetch(`${API_BASE_URL}/api/auth/csrf/`, {
         method: 'GET',
         credentials: 'include',
       });
-
-      // #region agent log
-      // const responseHeaders: Record<string, string> = {};
-      // csrfResponse.headers.forEach((value, key) => { responseHeaders[key] = value; });
-      // fetch('http://127.0.0.1:7242/ingest/3af02a19-0e17-41e8-ac44-ef1dc9eeab8d',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'auth.ts:125',message:'CSRF response received',data:{status:csrfResponse.ok,statusCode:csrfResponse.status,headers:responseHeaders,setCookie:responseHeaders['set-cookie']||'none'},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H3,H4'})}).catch(()=>{});
-      // // #endregion
 
       if (!csrfResponse.ok) {
         console.error('Failed to get CSRF token:', csrfResponse.status, csrfResponse.statusText);
         throw new Error('Failed to get CSRF token');
       }
 
-      const csrfToken = getCookie('csrftoken');
-      console.log('CSRF Token:', csrfToken);
+      // Get the token from the JSON response instead of cookies
+      const csrfData = await csrfResponse.json();
+      const csrfToken = csrfData.csrfToken;
       
-      // #region agent log
-      // fetch('http://127.0.0.1:7242/ingest/3af02a19-0e17-41e8-ac44-ef1dc9eeab8d',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'auth.ts:140',message:'After getCookie',data:{csrfToken:csrfToken||'NULL',allCookies:document.cookie,cookieLength:document.cookie.length},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H3,H4,H5'})}).catch(()=>{});
-      // #endregion
+      console.log('CSRF Token from response:', csrfToken ? 'received' : 'missing');
       
       if (!csrfToken) {
-        throw new Error('CSRF token not found in cookies');
+        throw new Error('CSRF token not found in response');
       }
 
       console.log('Sending login request...');
@@ -158,9 +145,9 @@ const authService = {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json',  // Explicitly request JSON response
+          'Accept': 'application/json',
           'X-CSRFToken': csrfToken,
-          'X-Requested-With': 'XMLHttpRequest',  // Helps identify AJAX requests
+          'X-Requested-With': 'XMLHttpRequest',
         },
         credentials: 'include',
         body: JSON.stringify(data),
@@ -170,7 +157,7 @@ const authService = {
       
       // Get response text first to handle both JSON and non-JSON responses
       const responseText = await response.text();
-      console.log('Raw response:', responseText);
+      console.log('Response received');
 
       let responseData;
       try {
