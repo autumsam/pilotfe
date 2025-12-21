@@ -1,6 +1,6 @@
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://pilotbe.onrender.com';
 
-// Helper function to get CSRF token from cookies (kept for backwards compatibility)
+// Helper function to get CSRF token from cookies
 function getCookie(name: string): string | null {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
@@ -145,9 +145,9 @@ const authService = {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json',
+          'Accept': 'application/json',  // Explicitly request JSON response
           'X-CSRFToken': csrfToken,
-          'X-Requested-With': 'XMLHttpRequest',
+          'X-Requested-With': 'XMLHttpRequest',  // Helps identify AJAX requests
         },
         credentials: 'include',
         body: JSON.stringify(data),
@@ -157,7 +157,7 @@ const authService = {
       
       // Get response text first to handle both JSON and non-JSON responses
       const responseText = await response.text();
-      console.log('Response received');
+      console.log('Raw response:', responseText);
 
       let responseData;
       try {
