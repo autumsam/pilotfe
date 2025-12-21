@@ -122,7 +122,7 @@ const authService = {
       console.log('Starting login process...');
       
       // #region agent log
-      fetch('http://127.0.0.1:7242/ingest/3af02a19-0e17-41e8-ac44-ef1dc9eeab8d',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'auth.ts:115',message:'Login started',data:{API_BASE_URL,origin:window.location.origin,allCookies:document.cookie},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H1,H2'})}).catch(()=>{});
+      // fetch('http://127.0.0.1:7242/ingest/3af02a19-0e17-41e8-ac44-ef1dc9eeab8d',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'auth.ts:115',message:'Login started',data:{API_BASE_URL,origin:window.location.origin,allCookies:document.cookie},timestamp:Date.now(),sessionId:'debug-session',hypothesisId:'H1,H2'})}).catch(()=>{});
       // #endregion
       
       // First, get the CSRF token
