@@ -6,7 +6,6 @@ import { componentTagger } from "lovable-tagger";
 export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
-    port: ,
     allowedHosts: ["https://pilotfe.vercel.app/"], // <-- Add this line
   },
   plugins: [
