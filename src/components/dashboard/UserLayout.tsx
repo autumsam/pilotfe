@@ -4,6 +4,7 @@ import { SidebarProvider, Sidebar } from "@/components/ui/sidebar";
 import DashboardHeader from "./DashboardHeader";
 import UserSidebar from "./UserSidebar";
 import CreatePostModal from "../modals/CreatePostModal";
+import BottomNavigation from "../navigation/BottomNavigation";
 
 interface UserLayoutProps {
   children: React.ReactNode;
@@ -69,6 +70,9 @@ const UserLayout = ({ children }: UserLayoutProps) => {
           isOpen={isPostModalOpen}
           onClose={() => setIsPostModalOpen(false)}
         />
+
+        {/* Bottom Navigation for Mobile */}
+        <BottomNavigation />
       </div>
     </SidebarProvider>
   );

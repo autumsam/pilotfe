@@ -19,7 +19,8 @@ import {
   Settings,
   LogOut,
   User,
-  PenSquare
+  PenSquare,
+  Globe
 } from "lucide-react";
 
 const UserSidebar = () => {
@@ -74,12 +75,22 @@ const UserSidebar = () => {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton 
-                  isActive={isActive("/post-activity")} 
-                  tooltip="Post Activity" 
-                  onClick={() => handleNavigate("/post-activity")}
+                  isActive={isActive("/home")} 
+                  tooltip="Home" 
+                  onClick={() => handleNavigate("/home")}
                 >
                   <LayoutDashboard />
-                  <span>Post Activity</span>
+                  <span>Home</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton 
+                  isActive={isActive("/socials")} 
+                  tooltip="Socials" 
+                  onClick={() => handleNavigate("/socials")}
+                >
+                  <Globe />
+                  <span>Socials</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>

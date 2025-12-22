@@ -14,6 +14,10 @@ import PlatformPieChart from "@/components/dashboard/performance/PlatformPieChar
 import PlatformBarChart from "@/components/dashboard/performance/PlatformBarChart";
 import PlatformLineChart from "@/components/dashboard/performance/PlatformLineChart";
 import PlatformTableView from "@/components/dashboard/performance/PlatformTableView";
+import AnimatedPage from "@/components/animations/AnimatedPage";
+import AnimatedCard from "@/components/animations/AnimatedCard";
+import AnimatedNumber from "@/components/animations/AnimatedNumber";
+import { motion, useReducedMotion } from "framer-motion";
 
 
 interface AnalyticsSummary {
@@ -38,6 +42,7 @@ const PerformanceDashboard = () => {
   const [activeTab, setActiveTab] = useState<'overview' | 'engagement' | 'platforms' | 'insights'>('overview');
   const [expandedPlatform, setExpandedPlatform] = useState<string | null>(null);
   const [viewType, setViewType] = useState<ViewType>('bar');
+  const shouldReduceMotion = useReducedMotion();
   
   const [analytics, setAnalytics] = useState<AnalyticsSummary>({
     total_impressions: 0,
@@ -159,96 +164,149 @@ const PerformanceDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background pb-20 md:pb-6">
-      {/* Header - Desktop only */}
-      <div className="hidden md:flex justify-between items-center p-6">
-        <div>
-          <h1 className="text-2xl md:text-3xl font-bold">Performance Dashboard</h1>
-          <p className="text-muted-foreground">Track your social media metrics across platforms</p>
-        </div>
-        <ThemeToggle />
+    <AnimatedPage>
+      <div className="min-h-screen bg-background pb-20 md:pb-6">
+      {/* Header */}
+      <div className="flex justify-between items-center p-4 md:p-6">
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ 
+            type: "spring", 
+            stiffness: 260, 
+            damping: 20,
+            delay: 0.1 
+          }}
+        >
+          <h1 className="text-xl md:text-2xl font-semibold">Performance</h1>
+          <p className="text-sm text-muted-foreground">Track your metrics</p>
+        </motion.div>
       </div>
 
-      {/* Stats Cards - Always visible on top */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 p-4 md:p-6">
-        <Card className="border-l-4 border-l-primary">
-          <CardContent className="p-4">
-            <p className="text-xs md:text-sm text-muted-foreground mb-1">Total Reach</p>
-            <p className="text-xl md:text-2xl font-bold">{loading ? "..." : analytics.total_reach.toLocaleString()}</p>
-          </CardContent>
-        </Card>
+      {/* Stats Cards */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 px-4 md:px-6">
+        <AnimatedCard delay={0}>
+          <motion.div
+            whileHover={shouldReduceMotion ? {} : { y: -4, scale: 1.02 }}
+            transition={{ type: "spring", stiffness: 400, damping: 17 }}
+          >
+            <Card className="border-l-4 border-l-primary shadow-sm hover:shadow-md transition-shadow">
+              <CardContent className="p-4">
+                <p className="text-xs md:text-sm text-muted-foreground mb-1">Total Reach</p>
+                <p className="text-xl md:text-2xl font-bold">
+                  {loading ? "..." : <AnimatedNumber value={analytics.total_reach} />}
+                </p>
+              </CardContent>
+            </Card>
+          </motion.div>
+        </AnimatedCard>
         
-        <Card className="border-l-4 border-l-green-500">
-          <CardContent className="p-4">
-            <p className="text-xs md:text-sm text-muted-foreground mb-1">Engagement</p>
-            <p className="text-xl md:text-2xl font-bold">{loading ? "..." : analytics.total_engagements.toLocaleString()}</p>
-          </CardContent>
-        </Card>
+        <AnimatedCard delay={0.05}>
+          <motion.div
+            whileHover={shouldReduceMotion ? {} : { y: -4, scale: 1.02 }}
+            transition={{ type: "spring", stiffness: 400, damping: 17 }}
+          >
+            <Card className="border-l-4 border-l-green-500 shadow-sm hover:shadow-md transition-shadow">
+              <CardContent className="p-4">
+                <p className="text-xs md:text-sm text-muted-foreground mb-1">Engagement</p>
+                <p className="text-xl md:text-2xl font-bold">
+                  {loading ? "..." : <AnimatedNumber value={analytics.total_engagements} />}
+                </p>
+              </CardContent>
+            </Card>
+          </motion.div>
+        </AnimatedCard>
         
-        <Card className="border-l-4 border-l-blue-500">
-          <CardContent className="p-4">
-            <p className="text-xs md:text-sm text-muted-foreground mb-1">Impressions</p>
-            <p className="text-xl md:text-2xl font-bold">{loading ? "..." : analytics.total_impressions.toLocaleString()}</p>
-          </CardContent>
-        </Card>
+        <AnimatedCard delay={0.1}>
+          <motion.div
+            whileHover={shouldReduceMotion ? {} : { y: -4, scale: 1.02 }}
+            transition={{ type: "spring", stiffness: 400, damping: 17 }}
+          >
+            <Card className="border-l-4 border-l-blue-500 shadow-sm hover:shadow-md transition-shadow">
+              <CardContent className="p-4">
+                <p className="text-xs md:text-sm text-muted-foreground mb-1">Impressions</p>
+                <p className="text-xl md:text-2xl font-bold">
+                  {loading ? "..." : <AnimatedNumber value={analytics.total_impressions} />}
+                </p>
+              </CardContent>
+            </Card>
+          </motion.div>
+        </AnimatedCard>
         
-        <Card className="border-l-4 border-l-purple-500">
-          <CardContent className="p-4">
-            <p className="text-xs md:text-sm text-muted-foreground mb-1">Platforms</p>
-            <p className="text-xl md:text-2xl font-bold">{activeConnections.length}/5</p>
-          </CardContent>
-        </Card>
+        <AnimatedCard delay={0.15}>
+          <motion.div
+            whileHover={shouldReduceMotion ? {} : { y: -4, scale: 1.02 }}
+            transition={{ type: "spring", stiffness: 400, damping: 17 }}
+          >
+            <Card className="border-l-4 border-l-purple-500 shadow-sm hover:shadow-md transition-shadow">
+              <CardContent className="p-4">
+                <p className="text-xs md:text-sm text-muted-foreground mb-1">Platforms</p>
+                <p className="text-xl md:text-2xl font-bold">
+                  <AnimatedNumber value={activeConnections.length} format={(n) => Math.round(n) + '/5'} />
+                </p>
+              </CardContent>
+            </Card>
+          </motion.div>
+        </AnimatedCard>
       </div>
 {/* Desktop Tab Navigation */}
 <div className="hidden md:flex items-center justify-between px-6 mb-4 border-b border-border">
   <div className="flex items-center gap-1">
-    <button
+    <motion.button
       onClick={() => setActiveTab('overview')}
       className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 -mb-px transition-colors ${
         activeTab === 'overview'
           ? 'border-primary text-foreground'
           : 'border-transparent text-muted-foreground hover:text-foreground hover:border-border'
       }`}
+      whileHover={shouldReduceMotion ? {} : { y: -2 }}
+      whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
     >
       <Eye className="w-4 h-4" />
       Overview
-    </button>
+    </motion.button>
     
-    <button
+    <motion.button
       onClick={() => setActiveTab('engagement')}
       className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 -mb-px transition-colors ${
         activeTab === 'engagement'
           ? 'border-primary text-foreground'
           : 'border-transparent text-muted-foreground hover:text-foreground hover:border-border'
       }`}
+      whileHover={shouldReduceMotion ? {} : { y: -2 }}
+      whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
     >
       <MessageCircle className="w-4 h-4" />
       Engagement
-    </button>
+    </motion.button>
     
-    <button
+    <motion.button
       onClick={() => setActiveTab('platforms')}
       className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 -mb-px transition-colors ${
         activeTab === 'platforms'
           ? 'border-primary text-foreground'
           : 'border-transparent text-muted-foreground hover:text-foreground hover:border-border'
       }`}
+      whileHover={shouldReduceMotion ? {} : { y: -2 }}
+      whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
     >
       <LayoutGrid className="w-4 h-4" />
       Platforms
-    </button>
+    </motion.button>
     
-    <button
+    <motion.button
       onClick={() => setActiveTab('insights')}
       className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 -mb-px transition-colors ${
         activeTab === 'insights'
           ? 'border-primary text-foreground'
           : 'border-transparent text-muted-foreground hover:text-foreground hover:border-border'
       }`}
+      whileHover={shouldReduceMotion ? {} : { y: -2 }}
+      whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
     >
       <Sparkles className="w-4 h-4" />
       AI Insights
-    </button>
+    </motion.button>
   </div>
 
   {/* View Type Selector - Desktop */}
@@ -643,6 +701,7 @@ const PerformanceDashboard = () => {
         <ThemeToggle />
       </div>
     </div>
+    </AnimatedPage>
   );
 };
 

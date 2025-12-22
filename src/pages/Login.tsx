@@ -45,7 +45,7 @@ const Login = () => {
         if (role === 'admin' || result.user.is_staff) {
           navigate("/api-stats/social");
         } else {
-          navigate("/post-activity");
+          navigate("/home");
         }
       }
     } catch (error) {
@@ -104,7 +104,7 @@ const Login = () => {
         setIsFlipped(false);
         
         // Redirect to dashboard
-        navigate("/post-activity");
+        navigate("/home");
       }
     } catch (error) {
       toast.error("Registration failed: " + (error instanceof Error ? error.message : "Unknown error"));
@@ -120,9 +120,9 @@ const Login = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-600 to-blue-400 p-4">
       <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-white">PostPulse</h1>
-          <p className="text-white/80 mt-2">Sign in to manage your social media</p>
+        <div className="text-center mb-6 md:mb-8">
+          <h1 className="text-2xl md:text-3xl font-bold text-white">PostPulse</h1>
+          <p className="text-white/80 mt-2 text-sm md:text-base">Sign in to manage your social media</p>
         </div>
         
         <div 
@@ -137,36 +137,36 @@ const Login = () => {
               transformStyle: 'preserve-3d',
               transition: 'transform 0.6s',
               transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
-              height: '435px'
+              minHeight: '435px'
             }}
           >
             {/* Login Card (Front) */}
             <Card 
-              className="shadow-xl border-none absolute w-full"
+              className="shadow-xl border-none absolute w-full overflow-auto"
               style={{
                 backfaceVisibility: 'hidden',
                 position: 'absolute',
                 top: 0,
                 left: 0,
                 width: '100%',
-                height: '100%'
+                minHeight: '100%'
               }}
             >
-              <CardHeader>
-                <CardTitle>Welcome back</CardTitle>
-                <CardDescription>Enter your credentials to access your dashboard</CardDescription>
+              <CardHeader className="pb-4">
+                <CardTitle className="text-xl md:text-2xl">Welcome back</CardTitle>
+                <CardDescription className="text-sm">Enter your credentials to access your dashboard</CardDescription>
               </CardHeader>
               
               <form onSubmit={handleLogin}>
-                <CardContent className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="username">Username</Label>
+                <CardContent className="space-y-3 md:space-y-4 px-4 md:px-6">
+                  <div className="space-y-1.5 md:space-y-2">
+                    <Label htmlFor="username" className="text-sm">Username</Label>
                     <div className="relative">
-                      <User className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+                      <User className="absolute left-2.5 md:left-3 top-2.5 h-4 w-4 md:h-5 md:w-5 text-gray-400" />
                       <Input
                         id="username"
                         placeholder="Username"
-                        className="pl-10"
+                        className="pl-8 md:pl-10 h-9 md:h-10 text-sm md:text-base"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                         required
@@ -174,15 +174,15 @@ const Login = () => {
                     </div>
                   </div>
                   
-                  <div className="space-y-2">
-                    <Label htmlFor="password">Password</Label>
+                  <div className="space-y-1.5 md:space-y-2">
+                    <Label htmlFor="password" className="text-sm">Password</Label>
                     <div className="relative">
-                      <Lock className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+                      <Lock className="absolute left-2.5 md:left-3 top-2.5 h-4 w-4 md:h-5 md:w-5 text-gray-400" />
                       <Input
                         id="password"
                         type="password"
                         placeholder="Password"
-                        className="pl-10"
+                        className="pl-8 md:pl-10 h-9 md:h-10 text-sm md:text-base"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
@@ -191,20 +191,20 @@ const Login = () => {
                   </div>
                 </CardContent>
                 
-                <CardFooter className="flex flex-col gap-4">
+                <CardFooter className="flex flex-col gap-3 md:gap-4 px-4 md:px-6 pb-4 md:pb-6">
                   <Button 
                     type="submit" 
-                    className="w-full bg-postpulse-orange hover:bg-orange-600 gap-2"
+                    className="w-full bg-postpulse-orange hover:bg-orange-600 gap-2 h-9 md:h-10 text-sm md:text-base"
                     disabled={isLoading}
                   >
                     {isLoading ? "Authenticating..." : (
                       <>
-                        <LogIn size={18} />
+                        <LogIn size={16} className="md:w-[18px] md:h-[18px]" />
                         Sign In
                       </>
                     )}
                   </Button>
-                  <p className="text-sm text-center">
+                  <p className="text-xs md:text-sm text-center">
                     Don't have an account?{" "}
                     <button 
                       type="button" 
@@ -220,7 +220,7 @@ const Login = () => {
 
             {/* Signup Card (Back) */}
             <Card 
-              className="shadow-xl border-none absolute w-full backface-hidden transform-rotate-y-180"
+              className="shadow-xl border-none absolute w-full backface-hidden transform-rotate-y-180 overflow-auto"
               style={{
                 backfaceVisibility: 'hidden',
                 transform: 'rotateY(180deg)',
@@ -228,24 +228,24 @@ const Login = () => {
                 top: 0,
                 left: 0,
                 width: '100%',
-                height: '100%'
+                minHeight: '100%'
               }}
             >
-              <CardHeader>
-                <CardTitle>Create account</CardTitle>
-                <CardDescription>Sign up for a new PostPulse account</CardDescription>
+              <CardHeader className="pb-3 md:pb-4">
+                <CardTitle className="text-xl md:text-2xl">Create account</CardTitle>
+                <CardDescription className="text-sm">Sign up for a new PostPulse account</CardDescription>
               </CardHeader>
               
               <form onSubmit={handleSignup}>
-                <CardContent className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="signup-username">Username</Label>
+                <CardContent className="space-y-2.5 md:space-y-4 px-4 md:px-6">
+                  <div className="space-y-1 md:space-y-2">
+                    <Label htmlFor="signup-username" className="text-sm">Username</Label>
                     <div className="relative">
-                      <User className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+                      <User className="absolute left-2.5 md:left-3 top-2.5 h-4 w-4 md:h-5 md:w-5 text-gray-400" />
                       <Input
                         id="signup-username"
                         placeholder="Choose a username"
-                        className="pl-10"
+                        className="pl-8 md:pl-10 h-9 md:h-10 text-sm md:text-base"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                         required
@@ -253,15 +253,15 @@ const Login = () => {
                     </div>
                   </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="signup-email">Email</Label>
+                  <div className="space-y-1 md:space-y-2">
+                    <Label htmlFor="signup-email" className="text-sm">Email</Label>
                     <div className="relative">
-                      <Mail className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+                      <Mail className="absolute left-2.5 md:left-3 top-2.5 h-4 w-4 md:h-5 md:w-5 text-gray-400" />
                       <Input
                         id="signup-email"
                         type="email"
                         placeholder="Email address"
-                        className="pl-10"
+                        className="pl-8 md:pl-10 h-9 md:h-10 text-sm md:text-base"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
@@ -269,15 +269,15 @@ const Login = () => {
                     </div>
                   </div>
                   
-                  <div className="space-y-2">
-                    <Label htmlFor="signup-password">Password</Label>
+                  <div className="space-y-1 md:space-y-2">
+                    <Label htmlFor="signup-password" className="text-sm">Password</Label>
                     <div className="relative">
-                      <Lock className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+                      <Lock className="absolute left-2.5 md:left-3 top-2.5 h-4 w-4 md:h-5 md:w-5 text-gray-400" />
                       <Input
                         id="signup-password"
                         type="password"
                         placeholder="Create a password"
-                        className="pl-10"
+                        className="pl-8 md:pl-10 h-9 md:h-10 text-sm md:text-base"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
@@ -285,15 +285,15 @@ const Login = () => {
                     </div>
                   </div>
                   
-                  <div className="space-y-2">
-                    <Label htmlFor="confirm-password">Confirm Password</Label>
+                  <div className="space-y-1 md:space-y-2">
+                    <Label htmlFor="confirm-password" className="text-sm">Confirm Password</Label>
                     <div className="relative">
-                      <Lock className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+                      <Lock className="absolute left-2.5 md:left-3 top-2.5 h-4 w-4 md:h-5 md:w-5 text-gray-400" />
                       <Input
                         id="confirm-password"
                         type="password"
                         placeholder="Confirm your password"
-                        className="pl-10"
+                        className="pl-8 md:pl-10 h-9 md:h-10 text-sm md:text-base"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         required
@@ -302,20 +302,20 @@ const Login = () => {
                   </div>
                 </CardContent>
                 
-                <CardFooter className="flex flex-col gap-4">
+                <CardFooter className="flex flex-col gap-3 md:gap-4 px-4 md:px-6 pb-4 md:pb-6">
                   <Button 
                     type="submit" 
-                    className="w-full bg-postpulse-blue hover:bg-blue-700 gap-2"
+                    className="w-full bg-postpulse-blue hover:bg-blue-700 gap-2 h-9 md:h-10 text-sm md:text-base"
                     disabled={isLoading}
                   >
                     {isLoading ? "Creating account..." : (
                       <>
-                        <UserPlus size={18} />
+                        <UserPlus size={16} className="md:w-[18px] md:h-[18px]" />
                         Sign Up
                       </>
                     )}
                   </Button>
-                  <p className="text-sm text-center">
+                  <p className="text-xs md:text-sm text-center">
                     Already have an account?{" "}
                     <button 
                       type="button" 

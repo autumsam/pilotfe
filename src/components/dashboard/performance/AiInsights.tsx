@@ -17,13 +17,13 @@ const AiInsights: React.FC<AiInsightsProps> = ({ onRefresh }) => {
   useEffect(() => {
     loadInsights();
     checkAIAvailability();
-  }, []);
-
-  useEffect(() => {
+    
+    // Set up refresh callback once on mount
     if (onRefresh) {
       onRefresh(handleRefresh);
     }
-  }, [onRefresh]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const checkAIAvailability = async () => {
     try {

@@ -86,7 +86,7 @@ const AiAssistant = () => {
   return (
     <div className="max-w-6xl mx-auto">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent flex items-center gap-2">
+        <h1 className="text-xl md:text-2xl font-semibold flex items-center gap-2">
           <Sparkles className="h-6 w-6" />
           AI Assistant
         </h1>

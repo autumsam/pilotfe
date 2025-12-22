@@ -38,7 +38,7 @@ const Messages = () => {
   return (
     <div className="h-[calc(100vh-120px)]">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">Messages</h1>
+        <h1 className="text-xl md:text-2xl font-semibold">Messages</h1>
         <p className="text-muted-foreground">Communicate with your team and collaborators</p>
       </div>
 

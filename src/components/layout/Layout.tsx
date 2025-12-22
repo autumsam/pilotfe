@@ -23,7 +23,10 @@ export default function Layout({ children }: LayoutProps) {
     path.startsWith("/system-settings") ||
     path.startsWith("/user-analytics") ||
     path.startsWith("/user-profile") ||
-    path.startsWith("/post-activity") ||
+    path.startsWith("/user-settings") ||
+    path.startsWith("/home") ||
+    path.startsWith("/socials") ||
+    path.startsWith("/post-activity") || // Legacy route
     path.startsWith("/performance-dashboard") ||
     path.startsWith("/schedule-posts") ||
     path === "/subscription" ||

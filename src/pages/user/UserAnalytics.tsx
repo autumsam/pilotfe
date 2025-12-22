@@ -4,10 +4,15 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ResponsiveContainer, LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from "recharts";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
-import { ThemeToggle } from "@/components/ui/theme-toggle";
-import { BarChart as BarChartIcon } from "lucide-react";
+import { Users, TrendingUp, FileText, Eye } from "lucide-react";
+import AnimatedPage from "@/components/animations/AnimatedPage";
+import AnimatedCard from "@/components/animations/AnimatedCard";
+import AnimatedNumber from "@/components/animations/AnimatedNumber";
+import { motion, useReducedMotion } from "framer-motion";
 
 const UserAnalytics = () => {
+  const shouldReduceMotion = useReducedMotion();
+  
   // Sample data
   const monthlyData = [
     { name: "Jan", followers: 1200, engagement: 500, reach: 8000 },
@@ -57,97 +62,185 @@ const UserAnalytics = () => {
   ];
 
   return (
-    <div className="space-y-6 w-full">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-2xl md:text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent">Analytics</h1>
-          <p className="text-muted-foreground mt-1">Deep dive into your social media performance</p>
-        </div>
-        <ThemeToggle />
+    <AnimatedPage>
+      <div className="space-y-4 md:space-y-6 w-full pb-20 md:pb-6">
+      <motion.div
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ 
+          type: "spring", 
+          stiffness: 260, 
+          damping: 20,
+          delay: 0.1 
+        }}
+      >
+        <h1 className="text-xl md:text-2xl font-semibold">Analytics</h1>
+        <p className="text-sm text-muted-foreground mt-1">Your social media performance</p>
+      </motion.div>
+
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+        <AnimatedCard delay={0}>
+          <motion.div
+            whileHover={shouldReduceMotion ? {} : { y: -4, scale: 1.02 }}
+            transition={{ type: "spring", stiffness: 400, damping: 17 }}
+          >
+            <Card className="border-l-4 border-l-primary shadow-sm hover:shadow-md transition-shadow">
+            <CardContent className="p-4 md:p-6">
+              <div className="flex items-center justify-between mb-2">
+                <div className="space-y-1">
+                  <p className="text-xs md:text-sm text-muted-foreground">Total Followers</p>
+                  <p className="text-2xl md:text-3xl font-bold">
+                    <AnimatedNumber value={12990} />
+                  </p>
+                </div>
+                <motion.div 
+                  className="bg-primary/10 p-3 rounded-lg"
+                  whileHover={shouldReduceMotion ? {} : { scale: 1.1, rotate: 5 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                >
+                  <Users className="h-5 w-5 md:h-6 md:w-6 text-primary" />
+                </motion.div>
+              </div>
+              <motion.span 
+                className="text-xs text-green-600 dark:text-green-400 font-medium"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3 }}
+              >
+                +8.4% from last month
+              </motion.span>
+            </CardContent>
+          </Card>
+          </motion.div>
+        </AnimatedCard>
+        
+        <AnimatedCard delay={0.05}>
+          <motion.div
+            whileHover={shouldReduceMotion ? {} : { y: -4, scale: 1.02 }}
+            transition={{ type: "spring", stiffness: 400, damping: 17 }}
+          >
+            <Card className="border-l-4 border-l-green-500 shadow-sm hover:shadow-md transition-shadow">
+            <CardContent className="p-4 md:p-6">
+              <div className="flex items-center justify-between mb-2">
+                <div className="space-y-1">
+                  <p className="text-xs md:text-sm text-muted-foreground">Engagement Rate</p>
+                  <p className="text-2xl md:text-3xl font-bold">
+                    <AnimatedNumber value={5.7} format={(n) => n.toFixed(1) + '%'} />
+                  </p>
+                </div>
+                <motion.div 
+                  className="bg-green-500/10 p-3 rounded-lg"
+                  whileHover={shouldReduceMotion ? {} : { scale: 1.1, rotate: -5 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                >
+                  <TrendingUp className="h-5 w-5 md:h-6 md:w-6 text-green-600 dark:text-green-400" />
+                </motion.div>
+              </div>
+              <motion.span 
+                className="text-xs text-green-600 dark:text-green-400 font-medium"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3 }}
+              >
+                +1.2% from last month
+              </motion.span>
+            </CardContent>
+          </Card>
+          </motion.div>
+        </AnimatedCard>
+        
+        <AnimatedCard delay={0.1}>
+          <motion.div
+            whileHover={shouldReduceMotion ? {} : { y: -4, scale: 1.02 }}
+            transition={{ type: "spring", stiffness: 400, damping: 17 }}
+          >
+            <Card className="border-l-4 border-l-purple-500 shadow-sm hover:shadow-md transition-shadow">
+            <CardContent className="p-4 md:p-6">
+              <div className="flex items-center justify-between mb-2">
+                <div className="space-y-1">
+                  <p className="text-xs md:text-sm text-muted-foreground">Total Posts</p>
+                  <p className="text-2xl md:text-3xl font-bold">
+                    <AnimatedNumber value={312} />
+                  </p>
+                </div>
+                <motion.div 
+                  className="bg-purple-500/10 p-3 rounded-lg"
+                  whileHover={shouldReduceMotion ? {} : { scale: 1.1, rotate: 5 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                >
+                  <FileText className="h-5 w-5 md:h-6 md:w-6 text-purple-600 dark:text-purple-400" />
+                </motion.div>
+              </div>
+              <motion.span 
+                className="text-xs text-green-600 dark:text-green-400 font-medium"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3 }}
+              >
+                +15 from last month
+              </motion.span>
+            </CardContent>
+          </Card>
+          </motion.div>
+        </AnimatedCard>
+        
+        <AnimatedCard delay={0.15}>
+          <motion.div
+            whileHover={shouldReduceMotion ? {} : { y: -4, scale: 1.02 }}
+            transition={{ type: "spring", stiffness: 400, damping: 17 }}
+          >
+            <Card className="border-l-4 border-l-amber-500 shadow-sm hover:shadow-md transition-shadow">
+            <CardContent className="p-4 md:p-6">
+              <div className="flex items-center justify-between mb-2">
+                <div className="space-y-1">
+                  <p className="text-xs md:text-sm text-muted-foreground">Average Reach</p>
+                  <p className="text-2xl md:text-3xl font-bold">
+                    <AnimatedNumber value={45200} format={(n) => (n/1000).toFixed(1) + 'k'} />
+                  </p>
+                </div>
+                <motion.div 
+                  className="bg-amber-500/10 p-3 rounded-lg"
+                  whileHover={shouldReduceMotion ? {} : { scale: 1.1, rotate: -5 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                >
+                  <Eye className="h-5 w-5 md:h-6 md:w-6 text-amber-600 dark:text-amber-400" />
+                </motion.div>
+              </div>
+              <motion.span 
+                className="text-xs text-green-600 dark:text-green-400 font-medium"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3 }}
+              >
+                +12% from last month
+              </motion.span>
+            </CardContent>
+          </Card>
+          </motion.div>
+        </AnimatedCard>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="stat-card border-l-4 border-l-primary bg-gradient-to-br from-blue-50/50 to-background dark:from-blue-950/20 dark:to-card">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between mb-2">
-              <div className="space-y-1">
-                <p className="text-sm font-medium text-muted-foreground">Total Followers</p>
-                <p className="text-3xl font-bold">12,990</p>
-              </div>
-              <div className="bg-primary/10 p-3 rounded-lg">
-                <BarChartIcon className="h-6 w-6 text-primary" />
-              </div>
-            </div>
-            <span className="text-xs text-green-600 dark:text-green-400 font-medium">+8.4% from last month</span>
-          </CardContent>
-        </Card>
-        
-        <Card className="stat-card border-l-4 border-l-green-500 bg-gradient-to-br from-green-50/50 to-background dark:from-green-950/20 dark:to-card">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between mb-2">
-              <div className="space-y-1">
-                <p className="text-sm font-medium text-muted-foreground">Engagement Rate</p>
-                <p className="text-3xl font-bold">5.7%</p>
-              </div>
-              <div className="bg-green-500/10 p-3 rounded-lg">
-                <BarChartIcon className="h-6 w-6 text-green-600 dark:text-green-400" />
-              </div>
-            </div>
-            <span className="text-xs text-green-600 dark:text-green-400 font-medium">+1.2% from last month</span>
-          </CardContent>
-        </Card>
-        
-        <Card className="stat-card border-l-4 border-l-purple-500 bg-gradient-to-br from-purple-50/50 to-background dark:from-purple-950/20 dark:to-card">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between mb-2">
-              <div className="space-y-1">
-                <p className="text-sm font-medium text-muted-foreground">Total Posts</p>
-                <p className="text-3xl font-bold">312</p>
-              </div>
-              <div className="bg-purple-500/10 p-3 rounded-lg">
-                <BarChartIcon className="h-6 w-6 text-purple-600 dark:text-purple-400" />
-              </div>
-            </div>
-            <span className="text-xs text-green-600 dark:text-green-400 font-medium">+15 from last month</span>
-          </CardContent>
-        </Card>
-        
-        <Card className="stat-card border-l-4 border-l-amber-500 bg-gradient-to-br from-amber-50/50 to-background dark:from-amber-950/20 dark:to-card">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between mb-2">
-              <div className="space-y-1">
-                <p className="text-sm font-medium text-muted-foreground">Average Reach</p>
-                <p className="text-3xl font-bold">45.2k</p>
-              </div>
-              <div className="bg-amber-500/10 p-3 rounded-lg">
-                <BarChartIcon className="h-6 w-6 text-amber-600 dark:text-amber-400" />
-              </div>
-            </div>
-            <span className="text-xs text-green-600 dark:text-green-400 font-medium">+12% from last month</span>
-          </CardContent>
-        </Card>
-      </div>
-
-      <Card className="hover-lift">
-        <CardHeader>
-          <CardTitle>Growth Trends</CardTitle>
-          <CardDescription>Six month overview of key metrics</CardDescription>
+      <AnimatedCard delay={0.2}>
+        <Card className="border">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-base md:text-lg font-semibold">Growth Trends</CardTitle>
+          <CardDescription className="text-xs md:text-sm">Six month overview</CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="h-[350px] w-full">
+        <CardContent className="px-2 md:px-6">
+          <div className="h-[250px] md:h-[300px] w-full">
             <ChartContainer
               config={{
-                followers: { color: "#3b82f6" },
-                engagement: { color: "#10b981" },
-                reach: { color: "#8b5cf6" },
+                followers: { color: "hsl(var(--primary))" },
+                engagement: { color: "hsl(var(--chart-2))" },
+                reach: { color: "hsl(var(--chart-3))" },
               }}
             >
               <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={monthlyData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                  <XAxis dataKey="name" />
-                  <YAxis yAxisId="left" />
-                  <YAxis yAxisId="right" orientation="right" />
+                <LineChart data={monthlyData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                  <XAxis dataKey="name" className="text-xs" />
+                  <YAxis yAxisId="left" className="text-xs" />
+                  <YAxis yAxisId="right" orientation="right" className="text-xs" />
                   <ChartTooltip 
                     content={({ active, payload, label }) => {
                       if (active && payload && payload.length) {
@@ -158,30 +251,30 @@ const UserAnalytics = () => {
                       return null;
                     }}
                   />
-                  <Legend />
+                  <Legend wrapperStyle={{ fontSize: '12px' }} />
                   <Line 
                     type="monotone" 
                     dataKey="followers" 
                     stroke="var(--color-followers)" 
                     yAxisId="left" 
-                    dot={{ r: 4 }}
-                    activeDot={{ r: 6 }}
+                    strokeWidth={2}
+                    dot={false}
                   />
                   <Line 
                     type="monotone" 
                     dataKey="engagement" 
                     stroke="var(--color-engagement)" 
                     yAxisId="left"
-                    dot={{ r: 4 }}
-                    activeDot={{ r: 6 }}
+                    strokeWidth={2}
+                    dot={false}
                   />
                   <Line 
                     type="monotone" 
                     dataKey="reach" 
                     stroke="var(--color-reach)" 
                     yAxisId="right"
-                    dot={{ r: 4 }}
-                    activeDot={{ r: 6 }}
+                    strokeWidth={2}
+                    dot={false}
                   />
                 </LineChart>
               </ResponsiveContainer>
@@ -189,35 +282,37 @@ const UserAnalytics = () => {
           </div>
         </CardContent>
       </Card>
+      </AnimatedCard>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="hover-lift">
-          <CardHeader>
-            <CardTitle>Platform Comparison</CardTitle>
-            <CardDescription>Performance metrics across platforms</CardDescription>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+        <AnimatedCard delay={0.25}>
+          <Card className="border">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base md:text-lg font-semibold">Platform Comparison</CardTitle>
+            <CardDescription className="text-xs md:text-sm">Performance by platform</CardDescription>
           </CardHeader>
-          <CardContent>
-            <Tabs defaultValue="followers" className="space-y-4">
-              <TabsList>
-                <TabsTrigger value="followers">Followers</TabsTrigger>
-                <TabsTrigger value="posts">Posts</TabsTrigger>
-                <TabsTrigger value="engagement">Engagement</TabsTrigger>
+          <CardContent className="px-2 md:px-6">
+            <Tabs defaultValue="followers" className="space-y-3">
+              <TabsList className="grid w-full grid-cols-3 h-8 md:h-9">
+                <TabsTrigger value="followers" className="text-xs md:text-sm">Followers</TabsTrigger>
+                <TabsTrigger value="posts" className="text-xs md:text-sm">Posts</TabsTrigger>
+                <TabsTrigger value="engagement" className="text-xs md:text-sm">Engagement</TabsTrigger>
               </TabsList>
 
               <TabsContent value="followers">
-                <div className="h-[250px]">
+                <div className="h-[200px] md:h-[220px]">
                   <ChartContainer
                     config={{
-                      followers: { color: "#3b82f6" }
+                      followers: { color: "hsl(var(--primary))" }
                     }}
                   >
                     <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={platformData}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                        <XAxis dataKey="name" />
-                        <YAxis />
+                      <BarChart data={platformData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
+                        <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                        <XAxis dataKey="name" className="text-xs" />
+                        <YAxis className="text-xs" />
                         <Tooltip />
-                        <Bar dataKey="followers" fill="#3b82f6" radius={[4, 4, 0, 0]} />
+                        <Bar dataKey="followers" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
                       </BarChart>
                     </ResponsiveContainer>
                   </ChartContainer>
@@ -225,19 +320,19 @@ const UserAnalytics = () => {
               </TabsContent>
 
               <TabsContent value="posts">
-                <div className="h-[250px]">
+                <div className="h-[200px] md:h-[220px]">
                   <ChartContainer
                     config={{
-                      posts: { color: "#10b981" }
+                      posts: { color: "hsl(var(--chart-2))" }
                     }}
                   >
                     <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={platformData}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                        <XAxis dataKey="name" />
-                        <YAxis />
+                      <BarChart data={platformData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
+                        <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                        <XAxis dataKey="name" className="text-xs" />
+                        <YAxis className="text-xs" />
                         <Tooltip />
-                        <Bar dataKey="posts" fill="#10b981" radius={[4, 4, 0, 0]} />
+                        <Bar dataKey="posts" fill="hsl(var(--chart-2))" radius={[4, 4, 0, 0]} />
                       </BarChart>
                     </ResponsiveContainer>
                   </ChartContainer>
@@ -245,19 +340,19 @@ const UserAnalytics = () => {
               </TabsContent>
 
               <TabsContent value="engagement">
-                <div className="h-[250px]">
+                <div className="h-[200px] md:h-[220px]">
                   <ChartContainer
                     config={{
-                      engagement: { color: "#8b5cf6" }
+                      engagement: { color: "hsl(var(--chart-3))" }
                     }}
                   >
                     <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={platformData}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                        <XAxis dataKey="name" />
-                        <YAxis />
+                      <BarChart data={platformData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
+                        <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                        <XAxis dataKey="name" className="text-xs" />
+                        <YAxis className="text-xs" />
                         <Tooltip />
-                        <Bar dataKey="engagement" fill="#8b5cf6" radius={[4, 4, 0, 0]} />
+                        <Bar dataKey="engagement" fill="hsl(var(--chart-3))" radius={[4, 4, 0, 0]} />
                       </BarChart>
                     </ResponsiveContainer>
                   </ChartContainer>
@@ -266,33 +361,35 @@ const UserAnalytics = () => {
             </Tabs>
           </CardContent>
         </Card>
+        </AnimatedCard>
 
-        <Card className="hover-lift">
-          <CardHeader>
-            <CardTitle>Content Type Performance</CardTitle>
-            <CardDescription>Which content formats perform best</CardDescription>
+        <AnimatedCard delay={0.3}>
+          <Card className="border">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base md:text-lg font-semibold">Content Performance</CardTitle>
+            <CardDescription className="text-xs md:text-sm">Best content formats</CardDescription>
           </CardHeader>
-          <CardContent>
-            <Tabs defaultValue="engagement" className="space-y-4">
-              <TabsList>
-                <TabsTrigger value="engagement">Engagement</TabsTrigger>
-                <TabsTrigger value="reach">Reach</TabsTrigger>
+          <CardContent className="px-2 md:px-6">
+            <Tabs defaultValue="engagement" className="space-y-3">
+              <TabsList className="grid w-full grid-cols-2 h-8 md:h-9">
+                <TabsTrigger value="engagement" className="text-xs md:text-sm">Engagement</TabsTrigger>
+                <TabsTrigger value="reach" className="text-xs md:text-sm">Reach</TabsTrigger>
               </TabsList>
 
               <TabsContent value="engagement">
-                <div className="h-[250px]">
+                <div className="h-[200px] md:h-[220px]">
                   <ChartContainer
                     config={{
-                      engagement: { color: "#f59e0b" }
+                      engagement: { color: "hsl(var(--primary))" }
                     }}
                   >
                     <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={contentTypeData}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                        <XAxis dataKey="name" />
-                        <YAxis />
+                      <BarChart data={contentTypeData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
+                        <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                        <XAxis dataKey="name" className="text-xs" />
+                        <YAxis className="text-xs" />
                         <Tooltip />
-                        <Bar dataKey="engagement" fill="#f59e0b" radius={[4, 4, 0, 0]} />
+                        <Bar dataKey="engagement" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
                       </BarChart>
                     </ResponsiveContainer>
                   </ChartContainer>
@@ -300,19 +397,19 @@ const UserAnalytics = () => {
               </TabsContent>
 
               <TabsContent value="reach">
-                <div className="h-[250px]">
+                <div className="h-[200px] md:h-[220px]">
                   <ChartContainer
                     config={{
-                      reach: { color: "#ec4899" }
+                      reach: { color: "hsl(var(--chart-2))" }
                     }}
                   >
                     <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={contentTypeData}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                        <XAxis dataKey="name" />
-                        <YAxis />
+                      <BarChart data={contentTypeData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
+                        <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                        <XAxis dataKey="name" className="text-xs" />
+                        <YAxis className="text-xs" />
                         <Tooltip />
-                        <Bar dataKey="reach" fill="#ec4899" radius={[4, 4, 0, 0]} />
+                        <Bar dataKey="reach" fill="hsl(var(--chart-2))" radius={[4, 4, 0, 0]} />
                       </BarChart>
                     </ResponsiveContainer>
                   </ChartContainer>
@@ -321,31 +418,33 @@ const UserAnalytics = () => {
             </Tabs>
           </CardContent>
         </Card>
+        </AnimatedCard>
       </div>
 
-      <Card className="hover-lift">
-        <CardHeader>
-          <CardTitle>Top Performing Posts</CardTitle>
-          <CardDescription>Your best content this quarter</CardDescription>
+      <AnimatedCard delay={0.35}>
+        <Card className="border">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-base md:text-lg font-semibold">Top Performing Posts</CardTitle>
+          <CardDescription className="text-xs md:text-sm">Your best content this quarter</CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-0 md:p-6 md:pt-0">
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+            <table className="w-full">
               <thead>
-                <tr>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Post</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Platform</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Engagement</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Date</th>
+                <tr className="border-b">
+                  <th className="px-3 md:px-4 py-2 md:py-3 text-left text-xs font-medium text-muted-foreground">Post</th>
+                  <th className="px-3 md:px-4 py-2 md:py-3 text-left text-xs font-medium text-muted-foreground">Platform</th>
+                  <th className="px-3 md:px-4 py-2 md:py-3 text-left text-xs font-medium text-muted-foreground">Engagement</th>
+                  <th className="px-3 md:px-4 py-2 md:py-3 text-left text-xs font-medium text-muted-foreground hidden md:table-cell">Date</th>
                 </tr>
               </thead>
-              <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-800">
+              <tbody>
                 {bestPostsData.map((post) => (
-                  <tr key={post.id}>
-                    <td className="px-4 py-4 whitespace-nowrap text-sm font-medium">{post.title}</td>
-                    <td className="px-4 py-4 whitespace-nowrap text-sm">{post.platform}</td>
-                    <td className="px-4 py-4 whitespace-nowrap text-sm">{post.engagement}</td>
-                    <td className="px-4 py-4 whitespace-nowrap text-sm">{post.date}</td>
+                  <tr key={post.id} className="border-b last:border-0">
+                    <td className="px-3 md:px-4 py-3 md:py-4 text-xs md:text-sm">{post.title}</td>
+                    <td className="px-3 md:px-4 py-3 md:py-4 text-xs md:text-sm">{post.platform}</td>
+                    <td className="px-3 md:px-4 py-3 md:py-4 text-xs md:text-sm font-medium">{post.engagement}</td>
+                    <td className="px-3 md:px-4 py-3 md:py-4 text-xs md:text-sm text-muted-foreground hidden md:table-cell">{post.date}</td>
                   </tr>
                 ))}
               </tbody>
@@ -353,7 +452,9 @@ const UserAnalytics = () => {
           </div>
         </CardContent>
       </Card>
+      </AnimatedCard>
     </div>
+    </AnimatedPage>
   );
 };
 

@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { ThemeProvider } from "./context/ThemeContext";
 import { Toaster } from "@/components/ui/toaster";
 import Layout from "./components/layout/Layout";
@@ -9,14 +9,15 @@ import ApiStats from "./pages/ApiStats";
 import { Toaster as SonnerToaster } from "sonner";
 import UserLayout from "./components/dashboard/UserLayout";
 import AdminLayout from "./components/dashboard/AdminLayout";
+import { AnimatePresence } from "framer-motion";
 
 // User Pages
 import PostActivity from "./pages/user/PostActivity";
 import PerformanceDashboard from "./pages/user/PerformanceDashboard";
 import SchedulePosts from "./pages/user/SchedulePosts";
 import UserAnalytics from "./pages/user/UserAnalytics";
-import UserProfile from "./pages/user/UserProfile";
-import UserSettings from "./pages/user/UserSettings";
+import Settings from "./pages/user/Settings";
+import Socials from "./pages/user/Socials";
 import Messages from "./pages/user/Messages";
 import Compose from "./pages/user/Compose";
 import Scheduled from "./pages/user/Scheduled";
@@ -81,11 +82,25 @@ const UserRoute = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };
 
-function App() {
+// Redirect authenticated users to appropriate dashboard
+const RedirectToDashboard = () => {
+  const isAuthenticated = localStorage.getItem("postpulse-authenticated") === "true";
+  const isAdmin = localStorage.getItem("postpulse-admin") === "true";
+  
+  if (isAuthenticated) {
+    return <Navigate to={isAdmin ? "/admin-dashboard" : "/home"} replace />;
+  }
+  
+  return <Navigate to="/login" replace />;
+};
+
+// Animated Routes wrapper
+const AnimatedRoutes = () => {
+  const location = useLocation();
+  
   return (
-    <ThemeProvider>
-      <BrowserRouter>
-        <Routes>
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
           {/* Public Pages */}
           <Route path="/" element={<Layout><Index /></Layout>} />
           <Route path="/login" element={<Login />} />
@@ -98,9 +113,11 @@ function App() {
           } />
           
           {/* Regular User Routes */}
-          <Route path="/post-activity" element={
+          <Route path="/home" element={
             <UserRoute><UserLayout><PostActivity /></UserLayout></UserRoute>
           } />
+          {/* Legacy route - redirect to new home route */}
+          <Route path="/post-activity" element={<Navigate to="/home" replace />} />
           <Route path="/performance-dashboard" element={
             <UserRoute><UserLayout><PerformanceDashboard /></UserLayout></UserRoute>
           } />
@@ -110,11 +127,13 @@ function App() {
           <Route path="/user-analytics" element={
             <UserRoute><UserLayout><UserAnalytics /></UserLayout></UserRoute>
           } />
-          <Route path="/user-profile" element={
-            <UserRoute><UserLayout><UserProfile /></UserLayout></UserRoute>
-          } />
           <Route path="/user-settings" element={
-            <UserRoute><UserLayout><UserSettings /></UserLayout></UserRoute>
+            <UserRoute><UserLayout><Settings /></UserLayout></UserRoute>
+          } />
+          {/* Legacy routes - redirect to new settings page */}
+          <Route path="/user-profile" element={<Navigate to="/user-settings" replace />} />
+          <Route path="/socials" element={
+            <UserRoute><UserLayout><Socials /></UserLayout></UserRoute>
           } />
           <Route path="/messages" element={
             <UserRoute><UserLayout><Messages /></UserLayout></UserRoute>
@@ -160,7 +179,7 @@ function App() {
             <ProtectedRoute>
               {localStorage.getItem("postpulse-admin") === "true" ? 
                 <Navigate to="/admin-dashboard" replace /> : 
-                <Navigate to="/post-activity" replace />
+                <Navigate to="/home" replace />
               }
             </ProtectedRoute>
           } />
@@ -178,7 +197,16 @@ function App() {
           
           {/* Not Found */}
           <Route path="*" element={<Layout><NotFound /></Layout>} />
-        </Routes>
+      </Routes>
+    </AnimatePresence>
+  );
+};
+
+function App() {
+  return (
+    <ThemeProvider>
+      <BrowserRouter>
+        <AnimatedRoutes />
         <Toaster />
         <SonnerToaster position="top-center" closeButton />
       </BrowserRouter>

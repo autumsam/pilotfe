@@ -11,6 +11,7 @@ import {
   SidebarGroupLabel,
   SidebarGroupContent
 } from "@/components/ui/sidebar";
+import { useSidebar } from "@/components/ui/sidebar/context";
 import { 
   Activity,
   PenSquare, 
@@ -22,12 +23,14 @@ import {
   MessageSquare,
   User,
   CreditCard,
-  TrendingUp
+  TrendingUp,
+  Globe
 } from "lucide-react";
 
 const UserDashboardSidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { isMobile, setOpenMobile } = useSidebar();
 
   const handleLogout = () => {
     localStorage.removeItem("postpulse-authenticated");
@@ -38,6 +41,11 @@ const UserDashboardSidebar = () => {
   };
 
   const handleNavigate = (path: string) => {
+    // Close sidebar immediately on mobile
+    if (isMobile) {
+      setOpenMobile(false);
+    }
+    // Navigate immediately
     navigate(path);
   };
 
@@ -69,12 +77,22 @@ const UserDashboardSidebar = () => {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton 
-                  isActive={isActive("/post-activity")} 
-                  tooltip="Post Activity" 
-                  onClick={() => handleNavigate("/post-activity")}
+                  isActive={isActive("/home")} 
+                  tooltip="Home" 
+                  onClick={() => handleNavigate("/home")}
                 >
                   <Activity />
-                  <span>Post Activity</span>
+                  <span>Home</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton 
+                  tooltip="Socials" 
+                  isActive={isActive("/socials")}
+                  onClick={() => handleNavigate("/socials")}
+                >
+                  <Globe />
+                  <span>Socials</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>

@@ -15,6 +15,10 @@ import { toast } from "sonner";
 import { DateRangePicker } from "@/components/ui/date-range-picker";
 import { DateRange } from "react-day-picker";
 import { format, subDays } from "date-fns";
+import AnimatedPage from "@/components/animations/AnimatedPage";
+import AnimatedCard from "@/components/animations/AnimatedCard";
+import AnimatedNumber from "@/components/animations/AnimatedNumber";
+import { motion, useReducedMotion } from "framer-motion";
 
 interface PostAnalytics {
   impressions: number;
@@ -295,165 +299,285 @@ const PostActivity = () => {
   };
 
   const scheduledPosts: any[] = [];
+  const shouldReduceMotion = useReducedMotion();
 
   return (
-    <div className="min-h-screen bg-background pb-20 md:pb-6">
-      {/* Header - Desktop only */}
-      <div className="hidden md:flex justify-between items-center p-6">
-        <div>
-          <h1 className="text-2xl md:text-3xl font-bold bg-clip-text text-foreground">Post Activity</h1>
-          <p className="text-muted-foreground mt-1">Track your post activity and engagement across platforms</p>
-        </div>
-        <div className="flex items-center gap-3">
+    <AnimatedPage>
+      <div className="min-h-screen bg-background pb-20 md:pb-6">
+      {/* Header */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 p-4 md:p-6">
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ 
+            type: "spring", 
+            stiffness: 260, 
+            damping: 20,
+            delay: 0.1 
+          }}
+        >
+          <h1 className="text-xl md:text-2xl font-semibold">Post Activity</h1>
+          <p className="text-sm text-muted-foreground mt-1">Track your posts and engagement</p>
+        </motion.div>
+        <motion.div 
+          className="flex items-center gap-2 md:gap-3"
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ 
+            type: "spring", 
+            stiffness: 260, 
+            damping: 20,
+            delay: 0.2 
+          }}
+        >
           <DateRangePicker
             value={dateRange}
             onChange={handleDateRangeChange}
           />
-          <Button variant="outline" size="sm" onClick={handleRefreshData}>
-            <RefreshCw className="h-4 w-4 mr-2" />
-            Refresh
-          </Button>
-          <ThemeToggle />
-        </div>
+          <motion.div
+            whileHover={shouldReduceMotion ? {} : { scale: 1.05, rotate: 180 }}
+            whileTap={shouldReduceMotion ? {} : { scale: 0.95 }}
+            transition={{ type: "spring", stiffness: 400, damping: 17 }}
+          >
+            <Button variant="outline" size="sm" onClick={handleRefreshData}>
+              <RefreshCw className="h-3 w-3 md:h-4 md:w-4" />
+            </Button>
+          </motion.div>
+        </motion.div>
       </div>
 
       {/* Stats Cards */}
-      {/* Stats Cards */}
-<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4 p-4 md:p-6">
-  <Card className="border-l-4 border-l-primary">
-    <CardContent className="p-3 md:p-4">
-      <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <p className="text-xs font-medium text-muted-foreground truncate">Total Posts</p>
-          <div className="bg-primary/10 p-2 rounded-lg shrink-0">
-            <BarChart className="h-4 w-4 md:h-5 md:w-5 text-primary" />
-          </div>
-        </div>
-        <p className="text-2xl md:text-3xl font-bold">{loading ? '...' : postsThisWeek}</p>
-      </div>
-    </CardContent>
-  </Card>
-  
-  <Card className="border-l-4 border-l-green-500">
-    <CardContent className="p-3 md:p-4">
-      <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <p className="text-xs font-medium text-muted-foreground truncate">Engagement</p>
-          <div className="bg-green-500/10 p-2 rounded-lg shrink-0">
-            <Heart className="h-4 w-4 md:h-5 md:w-5 text-green-600 dark:text-green-400" />
-          </div>
-        </div>
-        <div className="space-y-1">
-          <p className="text-2xl md:text-3xl font-bold">{loading ? '...' : totalEngagement.toLocaleString()}</p>
-          {engagementGrowth !== 0 && (
-            <div className={`flex items-center gap-1 text-xs ${engagementGrowth > 0 ? 'text-green-600' : 'text-red-600'}`}>
-              {engagementGrowth > 0 ? <ArrowUp className="h-3 w-3" /> : <ArrowDown className="h-3 w-3" />}
-              <span>{Math.abs(engagementGrowth).toFixed(1)}%</span>
+<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4 px-4 md:px-6">
+  <AnimatedCard delay={0}>
+    <motion.div
+      whileHover={shouldReduceMotion ? {} : { y: -4, scale: 1.02 }}
+      transition={{ type: "spring", stiffness: 400, damping: 17 }}
+    >
+      <Card className="border-l-4 border-l-primary shadow-sm hover:shadow-md transition-shadow">
+        <CardContent className="p-3 md:p-4">
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <p className="text-xs font-medium text-muted-foreground truncate">Total Posts</p>
+              <motion.div 
+                className="bg-primary/10 p-2 rounded-lg shrink-0"
+                whileHover={shouldReduceMotion ? {} : { scale: 1.1, rotate: 5 }}
+                transition={{ type: "spring", stiffness: 400, damping: 10 }}
+              >
+                <BarChart className="h-4 w-4 md:h-5 md:w-5 text-primary" />
+              </motion.div>
             </div>
-          )}
-        </div>
-      </div>
-    </CardContent>
-  </Card>
-  
-  <Card className="border-l-4 border-l-blue-500">
-    <CardContent className="p-3 md:p-4">
-      <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <p className="text-xs font-medium text-muted-foreground truncate">Total Reach</p>
-          <div className="bg-blue-500/10 p-2 rounded-lg shrink-0">
-            <Users className="h-4 w-4 md:h-5 md:w-5 text-blue-600 dark:text-blue-400" />
+            <p className="text-2xl md:text-3xl font-bold">
+              {loading ? '...' : <AnimatedNumber value={postsThisWeek} />}
+            </p>
           </div>
-        </div>
-        <div className="space-y-1">
-          <p className="text-2xl md:text-3xl font-bold">{loading ? '...' : totalReach.toLocaleString()}</p>
-          {reachGrowth !== 0 && (
-            <div className={`flex items-center gap-1 text-xs ${reachGrowth > 0 ? 'text-green-600' : 'text-red-600'}`}>
-              {reachGrowth > 0 ? <ArrowUp className="h-3 w-3" /> : <ArrowDown className="h-3 w-3" />}
-              <span>{Math.abs(reachGrowth).toFixed(1)}%</span>
+        </CardContent>
+      </Card>
+    </motion.div>
+  </AnimatedCard>
+  
+  <AnimatedCard delay={0.05}>
+    <motion.div
+      whileHover={shouldReduceMotion ? {} : { y: -4, scale: 1.02 }}
+      transition={{ type: "spring", stiffness: 400, damping: 17 }}
+    >
+      <Card className="border-l-4 border-l-green-500 shadow-sm hover:shadow-md transition-shadow">
+        <CardContent className="p-3 md:p-4">
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <p className="text-xs font-medium text-muted-foreground truncate">Engagement</p>
+              <motion.div 
+                className="bg-green-500/10 p-2 rounded-lg shrink-0"
+                whileHover={shouldReduceMotion ? {} : { scale: 1.1, rotate: -5 }}
+                transition={{ type: "spring", stiffness: 400, damping: 10 }}
+              >
+                <Heart className="h-4 w-4 md:h-5 md:w-5 text-green-600 dark:text-green-400" />
+              </motion.div>
             </div>
-          )}
-        </div>
-      </div>
-    </CardContent>
-  </Card>
-  
-  <Card className="border-l-4 border-l-purple-500">
-    <CardContent className="p-3 md:p-4">
-      <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <p className="text-xs font-medium text-muted-foreground truncate">Impressions</p>
-          <div className="bg-purple-500/10 p-2 rounded-lg shrink-0">
-            <Eye className="h-4 w-4 md:h-5 md:w-5 text-purple-600 dark:text-purple-400" />
+            <div className="space-y-1">
+              <p className="text-2xl md:text-3xl font-bold">
+                {loading ? '...' : <AnimatedNumber value={totalEngagement} />}
+              </p>
+              {engagementGrowth !== 0 && (
+                <motion.div 
+                  className={`flex items-center gap-1 text-xs ${engagementGrowth > 0 ? 'text-green-600' : 'text-red-600'}`}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                >
+                  <motion.div
+                    animate={shouldReduceMotion ? {} : { y: engagementGrowth > 0 ? [-2, 0] : [2, 0] }}
+                    transition={{ repeat: Infinity, repeatType: "reverse", duration: 1.5 }}
+                  >
+                    {engagementGrowth > 0 ? <ArrowUp className="h-3 w-3" /> : <ArrowDown className="h-3 w-3" />}
+                  </motion.div>
+                  <span>{Math.abs(engagementGrowth).toFixed(1)}%</span>
+                </motion.div>
+              )}
+            </div>
           </div>
-        </div>
-        <p className="text-2xl md:text-3xl font-bold">{loading ? '...' : totalImpressions.toLocaleString()}</p>
-      </div>
-    </CardContent>
-  </Card>
+        </CardContent>
+      </Card>
+    </motion.div>
+  </AnimatedCard>
   
-  <Card className="border-l-4 border-l-pink-500">
-    <CardContent className="p-3 md:p-4">
-      <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <p className="text-xs font-medium text-muted-foreground truncate">Avg Eng. Rate</p>
-          <div className="bg-pink-500/10 p-2 rounded-lg shrink-0">
-            <TrendingUp className="h-4 w-4 md:h-5 md:w-5 text-pink-600 dark:text-pink-400" />
+  <AnimatedCard delay={0.1}>
+    <motion.div
+      whileHover={shouldReduceMotion ? {} : { y: -4, scale: 1.02 }}
+      transition={{ type: "spring", stiffness: 400, damping: 17 }}
+    >
+      <Card className="border-l-4 border-l-blue-500 shadow-sm hover:shadow-md transition-shadow">
+        <CardContent className="p-3 md:p-4">
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <p className="text-xs font-medium text-muted-foreground truncate">Total Reach</p>
+              <motion.div 
+                className="bg-blue-500/10 p-2 rounded-lg shrink-0"
+                whileHover={shouldReduceMotion ? {} : { scale: 1.1, rotate: 5 }}
+                transition={{ type: "spring", stiffness: 400, damping: 10 }}
+              >
+                <Users className="h-4 w-4 md:h-5 md:w-5 text-blue-600 dark:text-blue-400" />
+              </motion.div>
+            </div>
+            <div className="space-y-1">
+              <p className="text-2xl md:text-3xl font-bold">
+                {loading ? '...' : <AnimatedNumber value={totalReach} />}
+              </p>
+              {reachGrowth !== 0 && (
+                <motion.div 
+                  className={`flex items-center gap-1 text-xs ${reachGrowth > 0 ? 'text-green-600' : 'text-red-600'}`}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                >
+                  <motion.div
+                    animate={shouldReduceMotion ? {} : { y: reachGrowth > 0 ? [-2, 0] : [2, 0] }}
+                    transition={{ repeat: Infinity, repeatType: "reverse", duration: 1.5 }}
+                  >
+                    {reachGrowth > 0 ? <ArrowUp className="h-3 w-3" /> : <ArrowDown className="h-3 w-3" />}
+                  </motion.div>
+                  <span>{Math.abs(reachGrowth).toFixed(1)}%</span>
+                </motion.div>
+              )}
+            </div>
           </div>
-        </div>
-        <p className="text-2xl md:text-3xl font-bold">{loading ? '...' : avgEngagementRate.toFixed(2)}%</p>
-      </div>
-    </CardContent>
-  </Card>
+        </CardContent>
+      </Card>
+    </motion.div>
+  </AnimatedCard>
   
-  <Card className="border-l-4 border-l-amber-500">
-    <CardContent className="p-3 md:p-4">
-      <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <p className="text-xs font-medium text-muted-foreground truncate">Best Platform</p>
-          <div className="bg-amber-500/10 p-2 rounded-lg shrink-0">
-            <BarChart className="h-4 w-4 md:h-5 md:w-5 text-amber-600 dark:text-amber-400" />
+  <AnimatedCard delay={0.15}>
+    <motion.div
+      whileHover={shouldReduceMotion ? {} : { y: -4, scale: 1.02 }}
+      transition={{ type: "spring", stiffness: 400, damping: 17 }}
+    >
+      <Card className="border-l-4 border-l-purple-500 shadow-sm hover:shadow-md transition-shadow">
+        <CardContent className="p-3 md:p-4">
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <p className="text-xs font-medium text-muted-foreground truncate">Impressions</p>
+              <motion.div 
+                className="bg-purple-500/10 p-2 rounded-lg shrink-0"
+                whileHover={shouldReduceMotion ? {} : { scale: 1.1, rotate: -5 }}
+                transition={{ type: "spring", stiffness: 400, damping: 10 }}
+              >
+                <Eye className="h-4 w-4 md:h-5 md:w-5 text-purple-600 dark:text-purple-400" />
+              </motion.div>
+            </div>
+            <p className="text-2xl md:text-3xl font-bold">
+              {loading ? '...' : <AnimatedNumber value={totalImpressions} />}
+            </p>
           </div>
-        </div>
-        <p className="text-lg md:text-xl font-bold truncate">{loading ? '...' : bestPlatform}</p>
-      </div>
-    </CardContent>
-  </Card>
+        </CardContent>
+      </Card>
+    </motion.div>
+  </AnimatedCard>
+  
+  <AnimatedCard delay={0.2}>
+    <motion.div
+      whileHover={shouldReduceMotion ? {} : { y: -4, scale: 1.02 }}
+      transition={{ type: "spring", stiffness: 400, damping: 17 }}
+    >
+      <Card className="border-l-4 border-l-pink-500 shadow-sm hover:shadow-md transition-shadow">
+        <CardContent className="p-3 md:p-4">
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <p className="text-xs font-medium text-muted-foreground truncate">Avg Eng. Rate</p>
+              <motion.div 
+                className="bg-pink-500/10 p-2 rounded-lg shrink-0"
+                whileHover={shouldReduceMotion ? {} : { scale: 1.1, rotate: 5 }}
+                transition={{ type: "spring", stiffness: 400, damping: 10 }}
+              >
+                <TrendingUp className="h-4 w-4 md:h-5 md:w-5 text-pink-600 dark:text-pink-400" />
+              </motion.div>
+            </div>
+            <p className="text-2xl md:text-3xl font-bold">
+              {loading ? '...' : <AnimatedNumber value={avgEngagementRate} format={(n) => n.toFixed(2) + '%'} />}
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+    </motion.div>
+  </AnimatedCard>
+  
+  <AnimatedCard delay={0.25}>
+    <motion.div
+      whileHover={shouldReduceMotion ? {} : { y: -4, scale: 1.02 }}
+      transition={{ type: "spring", stiffness: 400, damping: 17 }}
+    >
+      <Card className="border-l-4 border-l-amber-500 shadow-sm hover:shadow-md transition-shadow">
+        <CardContent className="p-3 md:p-4">
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <p className="text-xs font-medium text-muted-foreground truncate">Best Platform</p>
+              <motion.div 
+                className="bg-amber-500/10 p-2 rounded-lg shrink-0"
+                whileHover={shouldReduceMotion ? {} : { scale: 1.1, rotate: -5 }}
+                transition={{ type: "spring", stiffness: 400, damping: 10 }}
+              >
+                <BarChart className="h-4 w-4 md:h-5 md:w-5 text-amber-600 dark:text-amber-400" />
+              </motion.div>
+            </div>
+            <p className="text-lg md:text-xl font-bold truncate">{loading ? '...' : bestPlatform}</p>
+          </div>
+        </CardContent>
+      </Card>
+    </motion.div>
+  </AnimatedCard>
 </div>
-      {/* Platform Performance Cards - Desktop Only */}
+      {/* Platform Performance Cards */}
       {platformStats.length > 0 && (
-        <div className="hidden md:block p-4 md:p-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Platform Performance</CardTitle>
-              <CardDescription>Compare performance across your connected platforms</CardDescription>
+        <div className="p-4 md:p-6 pt-0">
+          <Card className="border">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base md:text-lg font-semibold">Platform Performance</CardTitle>
+              <CardDescription className="text-xs md:text-sm">Performance across platforms</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
                 {platformStats.map(stat => (
-                  <Card key={stat.platform} className="border-l-4 border-l-primary/50">
-                    <CardContent className="p-4">
-                      <div className="flex items-center gap-3 mb-3">
+                  <Card key={stat.platform} className="border">
+                    <CardContent className="p-3 md:p-4">
+                      <div className="flex items-center gap-2 mb-3">
                         <div className="text-foreground">
                           {getPlatformIcon(stat.platform)}
                         </div>
-                        <h3 className="font-bold capitalize">{stat.platform}</h3>
+                        <h3 className="font-semibold capitalize text-sm">{stat.platform}</h3>
                       </div>
-                      <div className="space-y-2 text-sm">
+                      <div className="space-y-1.5 text-xs md:text-sm">
                         <div className="flex justify-between">
-                          <span className="text-muted-foreground">Engagement:</span>
+                          <span className="text-muted-foreground">Engagement</span>
                           <span className="font-medium">{stat.total_engagement.toLocaleString()}</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-muted-foreground">Reach:</span>
+                          <span className="text-muted-foreground">Reach</span>
                           <span className="font-medium">{stat.total_reach.toLocaleString()}</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-muted-foreground">Impressions:</span>
+                          <span className="text-muted-foreground">Impressions</span>
                           <span className="font-medium">{stat.total_impressions.toLocaleString()}</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-muted-foreground">Avg Eng. Rate:</span>
+                          <span className="text-muted-foreground">Eng. Rate</span>
                           <span className="font-medium">{stat.avg_engagement_rate.toFixed(2)}%</span>
                         </div>
                       </div>
@@ -809,6 +933,7 @@ const PostActivity = () => {
         </div>
       </div>
     </div>
+    </AnimatedPage>
   );
 };
 

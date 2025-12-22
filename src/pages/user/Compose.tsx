@@ -159,8 +159,8 @@ const Compose = () => {
   return (
     <div className="max-w-5xl mx-auto">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">Compose Post</h1>
-        <p className="text-muted-foreground">Create and schedule your social media content with AI assistance</p>
+        <h1 className="text-xl md:text-2xl font-semibold">Compose Post</h1>
+        <p className="text-sm text-muted-foreground">Create and schedule your content</p>
       </div>
 
       {error && (

@@ -27,7 +27,8 @@ const DashboardHeader = ({ userRole, username = "" }: DashboardHeaderProps) => {
           </div>
         </div>
 
-        <div className="flex-1 max-w-md mx-auto">
+        {/* Search field - commented out for now */}
+        {/* <div className="flex-1 max-w-md mx-auto">
           <div className="relative">
             <Input
               placeholder="Search..."
@@ -41,7 +42,8 @@ const DashboardHeader = ({ userRole, username = "" }: DashboardHeaderProps) => {
               </svg>
             </span>
           </div>
-        </div>
+        </div> */}
+        <div className="flex-1"></div>
 
         {/* Right icons and actions */}
         <div className="flex items-center gap-3">
