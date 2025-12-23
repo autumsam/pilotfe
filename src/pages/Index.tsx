@@ -1,21 +1,27 @@
-import HeroSection from "@/components/landing/HeroSection";
-import FeaturesSection from "@/components/landing/FeaturesSection";
-import HowItWorksSection from "@/components/landing/HowItWorksSection";
-import TestimonialsSection from "@/components/landing/TestimonialsSection";
-import PricingSection from "@/components/landing/PricingSection";
-import CtaSection from "@/components/landing/CtaSection";
+// import HeroSection from "@/components/landing/HeroSection";
+// import FeaturesSection from "@/components/landing/FeaturesSection";
+// import HowItWorksSection from "@/components/landing/HowItWorksSection";
+// import TestimonialsSection from "@/components/landing/TestimonialsSection";
+// import PricingSection from "@/components/landing/PricingSection";
+// import CtaSection from "@/components/landing/CtaSection";
 
-const Index = () => {
+// const Index = () => {
+//   return (
+//     <>
+//       <HeroSection />
+//       <FeaturesSection />
+//       <HowItWorksSection />
+//       <TestimonialsSection />
+//       <PricingSection />
+//       <CtaSection />
+//     </>
+//   );
+// };
+
+// export default Index;
+
+export default function Stopped() {
   return (
-    <>
-      <HeroSection />
-      <FeaturesSection />
-      <HowItWorksSection />
-      <TestimonialsSection />
-      <PricingSection />
-      <CtaSection />
-    </>
-  );
-};
-
-export default Index;
+    <h1>🚫 App is temporarily unavailable</h1>
+  )
+}
