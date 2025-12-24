@@ -5,10 +5,39 @@ import { useState, useEffect } from "react";
 const HowItWorksSection = () => {
   const [hoveredStep, setHoveredStep] = useState(null);
   const [isVisible, setIsVisible] = useState(false);
+  const [visibleSteps, setVisibleSteps] = useState([]);
 
   useEffect(() => {
     setIsVisible(true);
-  }, []);
+
+    // Mobile scroll animation observer
+    const handleIntersection = (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const stepIndex = parseInt(entry.target.dataset.stepIndex);
+          if (!visibleSteps.includes(stepIndex)) {
+            setVisibleSteps((prev) => [...prev, stepIndex]);
+            // Auto-show animation on mobile
+            if (window.innerWidth < 768) {
+              setHoveredStep(stepIndex);
+              setTimeout(() => {
+                setHoveredStep(null);
+              }, 2000);
+            }
+          }
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(handleIntersection, {
+      threshold: 0.5,
+    });
+
+    const stepElements = document.querySelectorAll('[data-step-index]');
+    stepElements.forEach((el) => observer.observe(el));
+
+    return () => observer.disconnect();
+  }, [visibleSteps]);
 
   const socialPlatforms = [
     { icon: Facebook, color: "#1877F2", name: "Facebook" },
@@ -41,15 +70,15 @@ const HowItWorksSection = () => {
     },
     {
       number: "02",
-      title: "Create & Schedule",
-      description: "Craft engaging content or use AI assistance, then schedule posts for optimal times to maximize reach.",
-      animation: "schedule",
-    },
-    {
-      number: "03",
       title: "Analyze & Grow",
       description: "Track performance metrics and refine your strategy with data-driven insights and AI recommendations.",
       animation: "analytics",
+    },
+    {
+      number: "03",
+      title: "Create & Schedule",
+      description: "Craft engaging content or use AI assistance, then schedule posts for optimal times to maximize reach.",
+      animation: "schedule",
     },
   ];
 
@@ -97,7 +126,7 @@ const HowItWorksSection = () => {
         <div className="absolute inset-0 flex items-center justify-center">
           {scheduleIcons.map((item, i) => {
             const angle = (i / scheduleIcons.length) * 2 * Math.PI - Math.PI / 2;
-            const radius = isHovered ? 60 : 0;
+            const radius = isHovered ? 70 : 0;
             const x = Math.cos(angle) * radius;
             const y = Math.sin(angle) * radius;
             const Icon = item.icon;
@@ -130,7 +159,7 @@ const HowItWorksSection = () => {
         <div className="absolute inset-0 flex items-center justify-center">
           {analyticsIcons.map((item, i) => {
             const angle = (i / analyticsIcons.length) * 2 * Math.PI - Math.PI / 2;
-            const radius = isHovered ? 55 : 0;
+            const radius = isHovered ? 65 : 0;
             const x = Math.cos(angle) * radius;
             const y = Math.sin(angle) * radius;
             const Icon = item.icon;
@@ -205,6 +234,7 @@ const HowItWorksSection = () => {
               <div
                 key={index}
                 className="relative"
+                data-step-index={index}
                 onMouseEnter={() => setHoveredStep(index)}
                 onMouseLeave={() => setHoveredStep(null)}
               >
@@ -237,6 +267,13 @@ const HowItWorksSection = () => {
                     </p>
                   </div>
                 </div>
+
+                {/* Connector line for mobile */}
+                {index < steps.length - 1 && (
+                  <div className="md:hidden flex justify-center mt-8 mb-8">
+                    <div className="w-0.5 h-12 bg-gradient-to-b from-primary via-primary/50 to-transparent" />
+                  </div>
+                )}
               </div>
             ))}
           </div>
