@@ -1,27 +1,177 @@
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, Sparkles, Facebook, Twitter, Instagram, Linkedin, Youtube, MessageCircle, Calendar, Clock, BarChart3, TrendingUp, Target, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 const HowItWorksSection = () => {
-  const navigate = useNavigate();
+  const [hoveredStep, setHoveredStep] = useState(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
+
+  const socialPlatforms = [
+    { icon: Facebook, color: "#1877F2", name: "Facebook" },
+    { icon: Twitter, color: "#1DA1F2", name: "Twitter" },
+    { icon: Instagram, color: "#E4405F", name: "Instagram" },
+    { icon: Linkedin, color: "#0A66C2", name: "LinkedIn" },
+    { icon: Youtube, color: "#FF0000", name: "YouTube" },
+    { icon: MessageCircle, color: "#25D366", name: "WhatsApp" },
+  ];
+
+  const scheduleIcons = [
+    { icon: Calendar, name: "Calendar" },
+    { icon: Clock, name: "Schedule" },
+    { icon: Sparkles, name: "AI Content" },
+    { icon: Zap, name: "Quick Post" },
+  ];
+
+  const analyticsIcons = [
+    { icon: BarChart3, name: "Analytics" },
+    { icon: TrendingUp, name: "Growth" },
+    { icon: Target, name: "Goals" },
+  ];
 
   const steps = [
     {
       number: "01",
       title: "Connect Your Accounts",
       description: "Link your social media profiles in seconds with our secure integration. We support all major platforms.",
+      animation: "social",
     },
     {
       number: "02",
       title: "Create & Schedule",
       description: "Craft engaging content or use AI assistance, then schedule posts for optimal times to maximize reach.",
+      animation: "schedule",
     },
     {
       number: "03",
       title: "Analyze & Grow",
       description: "Track performance metrics and refine your strategy with data-driven insights and AI recommendations.",
+      animation: "analytics",
     },
   ];
+
+  const renderAnimation = (step, index) => {
+    const isHovered = hoveredStep === index;
+
+    if (step.animation === "social") {
+      return (
+        <div className="absolute inset-0 flex items-center justify-center">
+          {socialPlatforms.map((platform, i) => {
+            const angle = (i / socialPlatforms.length) * 2 * Math.PI - Math.PI / 2;
+            const radius = isHovered ? 65 : 0;
+            const x = Math.cos(angle) * radius;
+            const y = Math.sin(angle) * radius;
+            const Icon = platform.icon;
+            
+            return (
+              <div
+                key={i}
+                className="absolute transition-all duration-500 ease-out"
+                style={{
+                  transform: `translate(${x}px, ${y}px) scale(${isHovered ? 1 : 0})`,
+                  opacity: isHovered ? 1 : 0,
+                  transitionDelay: `${i * 50}ms`,
+                }}
+              >
+                <div 
+                  className="w-8 h-8 rounded-full bg-white shadow-lg flex items-center justify-center border border-slate-200"
+                  title={platform.name}
+                >
+                  <Icon 
+                    className="h-4 w-4" 
+                    style={{ color: platform.color }}
+                  />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      );
+    }
+
+    if (step.animation === "schedule") {
+      return (
+        <div className="absolute inset-0 flex items-center justify-center">
+          {scheduleIcons.map((item, i) => {
+            const angle = (i / scheduleIcons.length) * 2 * Math.PI - Math.PI / 2;
+            const radius = isHovered ? 60 : 0;
+            const x = Math.cos(angle) * radius;
+            const y = Math.sin(angle) * radius;
+            const Icon = item.icon;
+            
+            return (
+              <div
+                key={i}
+                className="absolute transition-all duration-500 ease-out"
+                style={{
+                  transform: `translate(${x}px, ${y}px) scale(${isHovered ? 1 : 0}) rotate(${isHovered ? 0 : -180}deg)`,
+                  opacity: isHovered ? 1 : 0,
+                  transitionDelay: `${i * 60}ms`,
+                }}
+              >
+                <div 
+                  className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg flex items-center justify-center"
+                  title={item.name}
+                >
+                  <Icon className="h-4 w-4 text-white" />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      );
+    }
+
+    if (step.animation === "analytics") {
+      return (
+        <div className="absolute inset-0 flex items-center justify-center">
+          {analyticsIcons.map((item, i) => {
+            const angle = (i / analyticsIcons.length) * 2 * Math.PI - Math.PI / 2;
+            const radius = isHovered ? 55 : 0;
+            const x = Math.cos(angle) * radius;
+            const y = Math.sin(angle) * radius;
+            const Icon = item.icon;
+            
+            return (
+              <div
+                key={i}
+                className="absolute transition-all duration-500 ease-out"
+                style={{
+                  transform: `translate(${x}px, ${y}px) scale(${isHovered ? 1 : 0})`,
+                  opacity: isHovered ? 1 : 0,
+                  transitionDelay: `${i * 70}ms`,
+                }}
+              >
+                <div 
+                  className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 shadow-lg flex items-center justify-center"
+                  title={item.name}
+                >
+                  <Icon className="h-4 w-4 text-white" />
+                </div>
+              </div>
+            );
+          })}
+          
+          {/* Pulsing rings for analytics */}
+          {isHovered && [0, 1, 2].map((ring) => (
+            <div
+              key={ring}
+              className="absolute inset-0 flex items-center justify-center"
+              style={{
+                animation: `pulse-ring 2s ease-out infinite`,
+                animationDelay: `${ring * 0.6}s`,
+              }}
+            >
+              <div className="w-20 h-20 rounded-full border-2 border-blue-500/30" />
+            </div>
+          ))}
+        </div>
+      );
+    }
+  };
 
   return (
     <section id="how-it-works" className="py-24 md:py-32 bg-background relative overflow-hidden">
@@ -54,15 +204,26 @@ const HowItWorksSection = () => {
             {steps.map((step, index) => (
               <div
                 key={index}
-                className="relative animate-fade-in"
-                style={{ animationDelay: `${index * 0.2}s` }}
+                className="relative"
+                onMouseEnter={() => setHoveredStep(index)}
+                onMouseLeave={() => setHoveredStep(null)}
               >
                 <div className="text-center space-y-4">
-                  {/* Step number */}
-                  <div className="relative inline-flex items-center justify-center">
-                    <div className="absolute inset-0 bg-primary/20 rounded-full blur-xl" />
-                    <div className="relative h-20 w-20 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shadow-lg">
-                      <span className="text-2xl font-bold text-primary-foreground">{step.number}</span>
+                  {/* Step number with animations */}
+                  <div className="relative inline-flex items-center justify-center h-32">
+                    {/* Animation layer */}
+                    {renderAnimation(step, index)}
+                    
+                    {/* Main circle */}
+                    <div className="relative inline-flex items-center justify-center">
+                      <div className={`absolute inset-0 rounded-full blur-xl transition-all duration-500 ${
+                        hoveredStep === index ? 'bg-primary/30 scale-110' : 'bg-primary/20'
+                      }`} />
+                      <div className={`relative h-20 w-20 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shadow-lg transition-all duration-300 ${
+                        hoveredStep === index ? 'scale-110' : 'scale-100'
+                      }`}>
+                        <span className="text-2xl font-bold text-primary-foreground">{step.number}</span>
+                      </div>
                     </div>
                   </div>
                   
@@ -84,7 +245,6 @@ const HowItWorksSection = () => {
             <Button
               size="lg"
               className="group bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg rounded-full shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5"
-              onClick={() => navigate("/login")}
             >
               Start Your Free Trial
               <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
@@ -95,6 +255,19 @@ const HowItWorksSection = () => {
           </div>
         </div>
       </div>
+
+      <style>{`
+        @keyframes pulse-ring {
+          0% {
+            transform: scale(0.8);
+            opacity: 1;
+          }
+          100% {
+            transform: scale(1.8);
+            opacity: 0;
+          }
+        }
+      `}</style>
     </section>
   );
 };
