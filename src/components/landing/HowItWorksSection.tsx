@@ -22,7 +22,7 @@ const HowItWorksSection = () => {
               setHoveredStep(stepIndex);
               setTimeout(() => {
                 setHoveredStep(null);
-              }, 2000);
+              }, 3000);
             }
           }
         }
@@ -30,14 +30,18 @@ const HowItWorksSection = () => {
     };
 
     const observer = new IntersectionObserver(handleIntersection, {
-      threshold: 0.5,
+      threshold: 0.3,
+      rootMargin: '0px 0px -50px 0px',
     });
 
-    const stepElements = document.querySelectorAll('[data-step-index]');
-    stepElements.forEach((el) => observer.observe(el));
+    // Use setTimeout to ensure DOM is ready
+    setTimeout(() => {
+      const stepElements = document.querySelectorAll('[data-step-index]');
+      stepElements.forEach((el) => observer.observe(el));
+    }, 100);
 
     return () => observer.disconnect();
-  }, [visibleSteps]);
+  }, []);
 
   const socialPlatforms = [
     { icon: Facebook, color: "#1877F2", name: "Facebook" },
@@ -237,6 +241,15 @@ const HowItWorksSection = () => {
                 data-step-index={index}
                 onMouseEnter={() => setHoveredStep(index)}
                 onMouseLeave={() => setHoveredStep(null)}
+                onTouchStart={() => {
+                  // Trigger animation on touch for mobile
+                  if (window.innerWidth < 768) {
+                    setHoveredStep(index);
+                    setTimeout(() => {
+                      setHoveredStep(null);
+                    }, 3000);
+                  }
+                }}
               >
                 <div className="text-center space-y-4">
                   {/* Step number with animations */}
@@ -268,10 +281,10 @@ const HowItWorksSection = () => {
                   </div>
                 </div>
 
-                {/* Connector line for mobile */}
+                {/* Horizontal connector line for mobile - positioned below content */}
                 {index < steps.length - 1 && (
                   <div className="md:hidden flex justify-center mt-8 mb-8">
-                    <div className="w-0.5 h-12 bg-gradient-to-b from-primary via-primary/50 to-transparent" />
+                    <div className="w-24 h-0.5 bg-gradient-to-r from-primary via-primary/50 to-primary" />
                   </div>
                 )}
               </div>
